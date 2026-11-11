@@ -1,0 +1,14 @@
+[
+ ["What is 144 divided by 12?", "MATH"], ["Solve 2x + 5 = 17", "MATH"], ["Calculate 15% of 2400", "MATH"],
+ ["What is the derivative of x squared?", "MATH"], ["Find the square root of 529", "MATH"], ["How do I calculate compound interest?", "EXPLAIN"],
+ ["Why do cats purr?", "EXPLAIN"], ["Explain blockchain in simple words", "EXPLAIN"], ["How does photosynthesis work?", "EXPLAIN"],
+ ["What is the difference between AI and machine learning?", "EXPLAIN"], ["Describe how the internet works", "EXPLAIN"], ["Teach me what recursion is", "EXPLAIN"],
+ ["Write a Python function to reverse a string", "CODE"], ["Fix this bug in my JavaScript code", "CODE"], ["Debug this SQL query", "CODE"],
+ ["Write a script to rename files in a folder", "CODE"], ["Create an HTML page with a login form", "CODE"], ["def add(a, b): return a - b  # why wrong?", "CODE"],
+ ["Translate 'good night' into Spanish", "TRANSLATE"], ["Translate this sentence to Urdu", "TRANSLATE"], ["How do you say thank you in French?", "TRANSLATE"],
+ ["Translation of 'I love learning' in German", "TRANSLATE"], ["Say 'welcome' in Arabic", "TRANSLATE"], ["Translate hello world into Chinese", "TRANSLATE"],
+ ["Summarize the key points of this article", "SUMMARIZE"], ["Give me a TL;DR of this report", "SUMMARIZE"], ["Shorten this paragraph", "SUMMARIZE"],
+ ["Summary of the following text please", "SUMMARIZE"], ["Condense this essay into 3 bullets", "SUMMARIZE"], ["Can you boil this long email down?", "SUMMARIZE"],
+ ["Write a polite email to my professor", "WRITE"], ["Draft a short LinkedIn post about my project", "WRITE"], ["Compose a letter asking for leave", "WRITE"],
+ ["Write a story about a robot who learns to paint", "WRITE"], ["Write a caption for my photo", "WRITE"], ["Help me write a speech for farewell", "WRITE"]
+]

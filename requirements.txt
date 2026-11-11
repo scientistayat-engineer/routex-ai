@@ -1,0 +1,7 @@
+crewai>=0.100.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-dotenv>=1.0
+langsmith>=0.1.100
+pydantic>=2.6
+litellm>=1.50
