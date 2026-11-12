@@ -63,8 +63,10 @@ async function checkHealth() {
   const pill = $("#healthPill");
   try {
     const h = await api.health();
-    pill.textContent = h.groq_key_set ? "● online" : "● key missing"; pill.className = "pill " + (h.groq_key_set ? "ok" : "bad");
-    pill.title = `Model: ${h.model} · LangSmith: ${h.langsmith ? "on" : "off"}`;
+    const lite = h.engine === "lite";
+    pill.textContent = h.groq_key_set ? (lite ? "● online · lite" : "● online") : "● key missing"; pill.className = "pill " + (h.groq_key_set ? "ok" : "bad");
+    pill.title = `Engine: ${lite ? "ROUTEX Lite (direct Groq API, no CrewAI)" : "CrewAI"} · Model: ${h.model} · LangSmith: ${h.langsmith ? "on" : "off"}`;
+    if (lite) $("#footerText").textContent = "ROUTEX Lite: same agents and prompts, direct Groq API. The full CrewAI version runs locally. · Groq · FastAPI · Firebase · LangSmith";
   } catch { pill.textContent = "● offline"; pill.className = "pill bad"; }
 }
 
