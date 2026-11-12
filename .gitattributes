@@ -1,0 +1,7 @@
+# Keep GitHub's language bar honest: lite/public is a copy of frontend/
+lite/public/** linguist-generated=true
+lite/app/meta.py linguist-generated=true
+lite/app/heuristics.py linguist-generated=true
+lite/app/schemas.py linguist-generated=true
+lite/app/tracing.py linguist-generated=true
+docs/** linguist-documentation

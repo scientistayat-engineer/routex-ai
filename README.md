@@ -19,6 +19,7 @@
 ![LangSmith](https://img.shields.io/badge/Tracing-LangSmith-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white)
 ![Tests](https://img.shields.io/badge/Tests-11%20passing-2EA44F?style=for-the-badge)
 ![Agents](https://img.shields.io/badge/Agents-6%20specialists-7C9CFF?style=for-the-badge)
+![CI](https://github.com/scientistayat-engineer/routex-ai/actions/workflows/tests.yml/badge.svg)
 
 ![Stars](https://img.shields.io/github/stars/scientistayat-engineer/routex-ai?style=social)
 ![Last commit](https://img.shields.io/github/last-commit/scientistayat-engineer/routex-ai?color=4EE1C1)
