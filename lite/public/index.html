@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ROUTEX — Smart Query Router</title>
+<meta name="description" content="ROUTEX: a multi-agent AI system built with CrewAI and Groq that routes every query to the right expert agent.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⇄</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet"></noscript>
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<div class="aurora a1"></div><div class="aurora a2"></div>
+<div class="progress" id="progress"></div>
+<canvas id="bg"></canvas>
+
+<header class="topbar">
+  <a class="brand" href="#top"><span class="brand-mark">⇄</span> ROUTEX</a>
+  <nav>
+    <a href="#agents">Agents</a>
+    <a href="#console">Console</a>
+    <a href="#lab">Lab</a>
+    <a href="#analytics">Analytics</a>
+    <a href="#architecture">Architecture</a>
+  </nav>
+  <div class="top-actions">
+    <div class="themes" id="themes" title="Theme"><button data-t="cyber" style="--c:#7c9cff"></button><button data-t="purple" style="--c:#b48cff"></button><button data-t="matrix" style="--c:#3dff9a"></button><button data-t="sunset" style="--c:#ff8a5b"></button></div>
+    <button class="btn ghost kbd" id="palBtn">⌘K</button>
+    <span class="pill" id="healthPill" title="Backend status">● connecting</span>
+    <button class="btn ghost" id="historyBtn">History</button>
+    <button class="btn" id="authBtn">Sign in</button>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="hero-text">
+    <p class="eyebrow">MULTI-AGENT AI · CREWAI × GROQ × LANGSMITH</p>
+    <h1>Every query.<br><span class="grad">Routed to the right mind.</span></h1>
+    <p class="lead">ROUTEX reads your question, classifies its intent, and hands it to a specialist agent — Math, Teacher, Code, Translator, Summarizer or Writer.</p>
+    <div class="cta">
+      <a class="btn primary" href="#console">Open Console →</a>
+      <a class="btn ghost" href="#architecture">How it works</a>
+    </div>
+    <div class="stats-strip">
+      <div><b data-to="6">6</b><span>Specialist agents</span></div>
+      <div><b data-to="2">2</b><span>Steps: route, then answer</span></div>
+      <div><b data-to="100" data-suf="%">100%</b><span>Traced in LangSmith</span></div>
+    </div>
+    </div>
+    <div class="hero-viz panel"><div class="hero-bar"><i></i><i></i><i></i><span>live routing demo</span></div><svg id="heroSvg" viewBox="0 0 640 460"></svg><div class="hero-caption" id="heroCaption">&nbsp;</div></div>
+  </section>
+
+  <div class="marquee"><div class="track"><span>CrewAI</span><span>Groq</span><span>FastAPI</span><span>Firebase</span><span>LangSmith</span><span>Vercel</span><span>CrewAI</span><span>Groq</span><span>FastAPI</span><span>Firebase</span><span>LangSmith</span><span>Vercel</span></div></div>
+
+  <section id="agents" class="section reveal">
+    <div class="section-head"><h2>Meet the agents</h2><p>One router, six specialists. Click a card to try it.</p></div>
+    <div class="agent-grid" id="agentCards"></div>
+  </section>
+
+  <section id="console" class="section">
+    <div class="section-head"><h2>Routing Console</h2><p>Ask anything. Watch the signal travel.</p></div>
+    <div class="console">
+      <div class="panel chat">
+        <div class="chat-toolbar">
+          <label class="mode">Mode
+            <select id="modeSelect">
+              <option value="">⚡ Auto-route</option>
+              <option value="MATH">∑ Math Expert</option>
+              <option value="EXPLAIN">◉ Teacher</option>
+              <option value="CODE">&lt;/&gt; Code Assistant</option>
+              <option value="TRANSLATE">文 Translator</option>
+              <option value="SUMMARIZE">≡ Summarizer</option>
+              <option value="WRITE">✎ Writer</option>
+            </select>
+          </label>
+          <label class="mode">Pipeline
+            <select id="chainSelect">
+              <option value="">None</option>
+              <option value="SUMMARIZE,TRANSLATE">Summarize → Translate</option>
+              <option value="EXPLAIN,SUMMARIZE">Explain → Summarize</option>
+              <option value="WRITE,TRANSLATE">Write → Translate</option>
+              <option value="CODE,EXPLAIN">Code → Explain</option>
+            </select>
+          </label>
+          <label class="mode"><input type="checkbox" id="memToggle"> Memory</label>
+          <div class="spacer"></div>
+          <button class="icon-btn" id="exportBtn" title="Export conversation">⬇</button>
+          <button class="icon-btn" id="clearBtn" title="Clear chat">🗑</button>
+        </div>
+        <div class="messages" id="messages">
+          <div class="empty" id="emptyState">
+            <div class="empty-orb">⇄</div>
+            <p>Try one of these:</p>
+            <div class="chips" id="chips"></div>
+          </div>
+        </div>
+        <div class="hint" id="liveHint"></div>
+        <div class="composer">
+          <textarea id="queryInput" rows="1" maxlength="2000" placeholder="Ask a question…  (Enter to send · Shift+Enter for new line · Ctrl+K to focus)"></textarea>
+          <button class="icon-btn" id="micBtn" title="Voice input">🎤</button>
+          <button class="btn primary" id="sendBtn">Route ➜</button>
+        </div>
+      </div>
+
+      <div class="panel viz">
+        <div class="viz-head"><h3>Live Routing Map</h3><span class="muted" id="vizStatus">idle</span></div>
+        <svg id="vizSvg" viewBox="0 0 640 460" role="img" aria-label="Routing graph"></svg>
+        <div class="decision" id="decision">
+          <div class="decision-row"><span class="muted">Decision</span><b id="decCat">—</b></div>
+          <div class="meter"><i id="decMeter"></i></div>
+          <div class="decision-row small"><span class="muted">Confidence</span><span id="decConf">—</span></div>
+          <p class="reason" id="decReason">The router's reasoning will appear here.</p>
+        </div>
+        <div class="trace" id="trace"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lab" class="section reveal">
+    <div class="section-head split"><div><h2>Evaluation Lab</h2><p>Test the router's accuracy. One query per line, optionally <code>query | EXPECTED</code>.</p></div><button class="btn ghost" id="labSample">Load sample set</button></div>
+    <div class="panel">
+      <textarea id="labInput" class="input lab-input" rows="7" placeholder="What is 144 / 12? | MATH&#10;Why do cats purr? | EXPLAIN"></textarea>
+      <div class="row lab-row"><button class="btn primary" id="labRun">Run evaluation</button><span class="muted" id="labStatus"></span></div>
+      <div id="labOut"></div>
+    </div>
+  </section>
+
+  <section id="analytics" class="section reveal">
+    <div class="section-head split"><div><h2>Analytics Dashboard</h2><p>Computed from your saved query history.</p></div><button class="btn ghost" id="seedBtn">Load sample data</button></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="grid2">
+      <div class="panel"><h3>Agent distribution</h3><div id="donut" class="chart"></div></div>
+      <div class="panel"><h3>Latency per query (ms)</h3><div id="bars" class="chart"></div></div>
+    </div>
+    <div class="panel" style="margin-top:20px"><h3>Router confidence trend</h3><div id="trend" class="chart"></div></div>
+  </section>
+
+  <section id="architecture" class="section reveal">
+    <div class="section-head"><h2>Architecture</h2><p>From keystroke to answer in four hops.</p></div>
+    <div class="arch">
+      <div class="arch-card"><span>01</span><h4>Client</h4><p>Vanilla JS app on Firebase Hosting / Vercel. Auth + history via Firebase.</p></div>
+      <div class="arch-card"><span>02</span><h4>FastAPI</h4><p>Serverless endpoint validates input and starts the CrewAI pipeline.</p></div>
+      <div class="arch-card"><span>03</span><h4>Router agent</h4><p>Groq LLM returns category, confidence and reasoning. Rule-based fallback if it fails.</p></div>
+      <div class="arch-card"><span>04</span><h4>Specialist agent</h4><p>Math, Teacher, Code, Translator, Summarizer or Writer produces the final answer. Every run is traced in LangSmith.</p></div>
+    </div>
+  </section>
+<section id="faq" class="section reveal">
+    <div class="section-head"><h2>FAQ</h2></div>
+    <div class="faq">
+      <details><summary>What happens if the router is unsure?</summary><p>A rule-based fallback classifier takes over, and the trace marks that step as “fallback”.</p></details>
+      <details><summary>Can I choose the agent myself?</summary><p>Yes. Use the mode dropdown in the console to skip routing and talk to one agent directly.</p></details>
+      <details><summary>Where is my history stored?</summary><p>In Firestore under your own account when signed in, otherwise only in this browser.</p></details>
+      <details><summary>How do I inspect each run?</summary><p>Every request is traced in LangSmith, with child runs for the router and the specialist agent.</p></details>
+    </div>
+  </section>
+</main>
+
+<footer id="footerText">Built with CrewAI · Groq · FastAPI · Firebase · LangSmith — ROUTEX © 2026</footer>
+
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head"><h3>History</h3><button class="icon-btn" id="drawerClose">✕</button></div>
+  <input id="historySearch" class="input" placeholder="Search history…">
+  <div id="historyList" class="history-list"></div>
+  <div class="row"><button class="btn ghost" id="expCsv">Export CSV</button><button class="btn ghost" id="expJson">Export JSON</button></div>
+  <button class="btn ghost danger" id="historyClear">Delete all history</button>
+</aside>
+
+<div class="modal" id="authModal" aria-hidden="true">
+  <div class="modal-card">
+    <button class="icon-btn modal-x" id="authClose">✕</button>
+    <h3 id="authTitle">Welcome to ROUTEX</h3>
+    <p class="muted" id="authNote">Sign in to sync your history across devices.</p>
+    <div id="authForms">
+      <button class="btn google" id="googleBtn">Continue with Google</button>
+      <div class="or"><span>or</span></div>
+      <input class="input" id="email" type="email" placeholder="Email" autocomplete="email">
+      <input class="input" id="password" type="password" placeholder="Password (min 6)" autocomplete="current-password">
+      <div class="row">
+        <button class="btn primary" id="signInBtn">Sign in</button>
+        <button class="btn ghost" id="signUpBtn">Create account</button>
+      </div>
+      <p class="error" id="authError"></p>
+    </div>
+    <div id="authUser" hidden>
+      <p id="authEmail"></p>
+      <button class="btn ghost danger" id="signOutBtn">Sign out</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="palette"><div class="pal-card"><input id="palInput" class="input" placeholder="Type a command…  (↑ ↓ Enter · Esc)" autocomplete="off"><div id="palList"></div></div></div>
+<div class="modal" id="keys"><div class="modal-card"><button class="icon-btn modal-x" id="keysClose">✕</button><h3>Keyboard shortcuts</h3>
+  <div class="keylist"><div><kbd>Ctrl</kbd> <kbd>K</kbd><span>Command palette</span></div><div><kbd>Enter</kbd><span>Send query</span></div><div><kbd>Shift</kbd> <kbd>Enter</kbd><span>New line</span></div><div><kbd>?</kbd><span>This help</span></div><div><kbd>Esc</kbd><span>Close dialogs</span></div></div></div></div>
+<div class="toasts" id="toasts"></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

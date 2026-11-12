@@ -1,5 +1,5 @@
 {
   "version": 2,
-  "outputDirectory": "frontend",
+  "outputDirectory": "public",
   "functions": { "api/*.py": { "maxDuration": 60, "includeFiles": "app/**" } }
 }
