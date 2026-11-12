@@ -1,4 +1,4 @@
-"""Vercel serverless entrypoint for ROUTEX Lite."""
+"""Vercel serverless entrypoint: /api/health. One file per route, so no rewrite is needed."""
 import os
 import sys
 

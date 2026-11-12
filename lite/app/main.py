@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
@@ -13,12 +13,23 @@ from .schemas import BatchRequest, RouteRequest
 from .service import classify_with_fallback, route_and_answer
 
 app = FastAPI(title="ROUTEX Lite - Smart Query Router", version="1.0.0")
+
+
+@app.middleware("http")
+async def trim_slash(request: Request, call_next):
+    """Treat /api/health/ the same as /api/health."""
+    p = request.scope["path"]
+    if len(p) > 1 and p.endswith("/"):
+        request.scope["path"] = p.rstrip("/")
+    return await call_next(request)
+
+
 app.add_middleware(CORSMiddleware, allow_origins=list(settings.allowed_origins) or ["*"], allow_methods=["*"], allow_headers=["*"])
 
 
 @app.get("/api/health")
-def health():
-    return {"status": "ok", "engine": "lite", "model": settings.model_id, "groq_key_set": bool(settings.groq_api_key),
+def health(request: Request):
+    return {"status": "ok", "engine": "lite", "path_seen": request.scope.get("path"), "model": settings.model_id, "groq_key_set": bool(settings.groq_api_key),
             "langsmith": settings.langsmith_enabled, "project": settings.langsmith_project}
 
 
